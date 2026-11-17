@@ -1,0 +1,428 @@
+
+/* ==========================================
+   1. RESET CSS
+========================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   2. BODY
+========================================== */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+
+/* ==========================================
+   3. HEADER
+========================================== */
+
+.header {
+    width: 100%;
+    background: #1e3a8a;
+    color: white;
+    padding: 25px 20px;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.header p {
+    font-size: 14px;
+    color: #dbeafe;
+}
+
+
+/* ==========================================
+   4. MAIN CONTAINER
+========================================== */
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+
+/* ==========================================
+   5. MAP SECTION
+========================================== */
+
+.map-section {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.map-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.map-heading h2 {
+    font-size: 23px;
+    color: #1e3a8a;
+}
+
+.map-heading p {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+
+/* ==========================================
+   6. MAP CONTROLS
+========================================== */
+
+.map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.control-btn {
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    padding: 10px 17px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.control-btn:hover {
+    background: #eff6ff;
+    border-color: #2563eb;
+}
+
+.control-btn.active {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.locate-btn {
+    margin-left: auto;
+}
+
+
+/* ==========================================
+   7. MAP
+========================================== */
+
+.map-wrapper {
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+
+/* ==========================================
+   8. MOOD PINS
+========================================== */
+
+.mood-pin-wrapper {
+    background: transparent;
+    border: none;
+}
+
+.mood-pin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    background: white;
+    border: 3px solid var(--emotion-color);
+
+    border-radius: 50%;
+
+    font-size: 20px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ==========================================
+   9. POPUP
+========================================== */
+
+.emotion-popup {
+    min-width: 170px;
+    font-family: Arial, sans-serif;
+}
+
+.emotion-popup h3 {
+    color: #1e3a8a;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.emotion-popup p {
+    font-size: 13px;
+    margin: 4px 0;
+}
+
+
+/* ==========================================
+   10. USER LOCATION
+========================================== */
+
+.my-location {
+    width: 18px;
+    height: 18px;
+
+    background: #2563eb;
+    border: 3px solid white;
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.25);
+}
+
+
+/* ==========================================
+   11. EMOTION LEGEND
+========================================== */
+
+.legend {
+    margin-top: 25px;
+    padding: 18px;
+
+    background: #f9fafb;
+    border-radius: 10px;
+}
+
+.legend h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    font-size: 14px;
+}
+
+.legend-icon {
+    font-size: 22px;
+}
+
+
+/* ==========================================
+   12. HEATMAP LEGEND
+========================================== */
+
+.heatmap-legend {
+    margin-top: 18px;
+    padding: 18px;
+
+    background: #f9fafb;
+    border-radius: 10px;
+}
+
+.heatmap-legend h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.heat-gradient {
+    width: 100%;
+    height: 16px;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+        to right,
+        blue,
+        cyan,
+        lime,
+        yellow,
+        red
+    );
+}
+
+.heat-labels {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 7px;
+
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.heat-description {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+
+/* ==========================================
+   13. FOOTER
+========================================== */
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   14. RESPONSIVE TABLET
+========================================== */
+
+@media (max-width: 768px) {
+
+    .header h1 {
+        font-size: 23px;
+    }
+
+    .map-section {
+        padding: 18px;
+    }
+
+    .map-wrapper {
+        height: 450px;
+    }
+
+    .locate-btn {
+        margin-left: 0;
+    }
+
+}
+
+
+/* ==========================================
+   15. RESPONSIVE MOBILE
+========================================== */
+
+@media (max-width: 480px) {
+
+    .container {
+        padding: 0 10px;
+        margin: 15px auto;
+    }
+
+    .header {
+        padding: 20px 15px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .map-section {
+        padding: 12px;
+    }
+
+    .map-heading h2 {
+        font-size: 19px;
+    }
+
+    .map-wrapper {
+        height: 400px;
+    }
+
+    .control-btn {
+        flex: 1;
+        padding: 9px 10px;
+        font-size: 12px;
+    }
+
+    .legend-items {
+        gap: 12px;
+    }
+
+}
+
+/* ==========================================
+   EMOTION MARKER CLUSTER
+========================================== */
+
+.emotion-cluster {
+    background: transparent;
+    border: none;
+}
+
+.emotion-cluster-inner {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    border: 3px solid rgba(255, 255, 255, 0.95);
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.25),
+        0 0 0 4px rgba(255, 255, 255, 0.25);
+
+    color: white;
+
+    transition: transform 0.2s ease;
+}
+
+.emotion-cluster-inner:hover {
+    transform: scale(1.12);
+}
+
+.emotion-cluster-icon {
+    font-size: 20px;
+    line-height: 22px;
+}
+
+.emotion-cluster-count {
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 14px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
