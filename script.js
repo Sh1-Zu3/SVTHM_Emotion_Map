@@ -1,4 +1,3 @@
-
 // ==========================================
 // 1. KIỂM TRA THƯ VIỆN
 // ==========================================
@@ -546,6 +545,9 @@ function calculateEmotionStats(data) {
 
 }
 
+// ==========================================
+// CẬP NHẬT TỔNG QUAN CẢM XÚC
+// ==========================================
 
 function updateEmpathyStats() {
 
@@ -557,48 +559,53 @@ function updateEmpathyStats() {
         return;
     }
 
+    // Lấy dữ liệu cảm xúc trong khu vực Thủ Đức
     const filteredData = getFilteredEmotionData();
 
+    // Tính số lượt ghi nhận theo từng cảm xúc
     const stats = calculateEmotionStats(filteredData);
 
+    // Tổng số lượt ghi nhận
     const total = Object.values(stats).reduce(
         (sum, value) => sum + value,
         0
     );
 
+    // ======================================
+    // CẬP NHẬT CÂU TỔNG QUAN
+    // ======================================
+
     if (total === 0) {
 
         messageElement.textContent =
-            "Chưa có lượt ghi nhận phù hợp với bộ lọc hiện tại.";
+            "Hiện chưa có lượt ghi nhận cảm xúc nào phù hợp với bộ lọc.";
 
     } else if (currentEmotionFilter === "all") {
 
-        const highestEmotion = Object.keys(stats).reduce((a, b) => {
-
-            return stats[a] >= stats[b] ? a : b;
-
-        });
-
-        const highestConfig = emotionConfig[highestEmotion];
-
         messageElement.textContent =
-            `Khu vực đang có ${total} lượt ghi nhận cảm xúc. ` +
-            `${highestConfig.icon} Cảm xúc được ghi nhận nhiều nhất là ${highestConfig.label.toLowerCase()}.`;
+            `Xung quanh khu vực đang có ${total.toLocaleString("vi-VN")} lượt ghi nhận cảm xúc. ` +
+            `Mọi người đang cảm thấy như thế nào?`;
 
     } else {
 
         const config = emotionConfig[currentEmotionFilter];
 
         messageElement.textContent =
-            `Đang hiển thị ${total} lượt ghi nhận thuộc trạng thái ${config.label.toLowerCase()}.`;
+            `Có ${stats[currentEmotionFilter].toLocaleString("vi-VN")} lượt ghi nhận cảm xúc ${config.label.toLowerCase()} trong khu vực.`;
 
     }
+
+
+    // ======================================
+    // HIỂN THỊ SỐ LƯỢNG TỪNG CẢM XÚC
+    // ======================================
 
     statsElement.innerHTML = "";
 
     Object.keys(emotionConfig).forEach(emotion => {
 
-        // Khi lọc một cảm xúc, chỉ hiển thị cảm xúc đó.
+        // Nếu đang lọc một cảm xúc,
+        // chỉ hiển thị cảm xúc được chọn.
 
         if (
             currentEmotionFilter !== "all" &&
@@ -659,12 +666,6 @@ const moodLayer = L.layerGroup();
 // Layer Heatmap.
 
 let heatLayer = null;
-
-
-// Layer vị trí người dùng.
-
-const locationLayer = L.layerGroup().addTo(map);
-
 
 // Chế độ hiện tại.
 
@@ -1042,321 +1043,6 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
 
 }
 
-
-// ==========================================
-// 25. ĐÓNG BẢNG THỐNG KÊ QUANH VỊ TRÍ
-// ==========================================
-
-const nearbyPanel = document.getElementById("nearbyEmotionPanel");
-
-const closeNearbyButton = document.getElementById("closeNearbyPanel");
-
-if (closeNearbyButton && nearbyPanel) {
-
-    closeNearbyButton.addEventListener("click", function() {
-
-        nearbyPanel.style.display = "none";
-
-    });
-
-}
-
-
-// ==========================================
-// 26. THỐNG KÊ CẢM XÚC QUANH NGƯỜI DÙNG
-// ==========================================
-
-function showNearbyEmotions(userLat, userLng) {
-
-    const panel = document.getElementById("nearbyEmotionPanel");
-
-    if (!panel) {
-        return;
-    }
-
-    const nearbyData = getFilteredEmotionData().filter(item => {
-
-        const distance = calculateDistance(
-
-            userLat,
-
-            userLng,
-
-            item.lat,
-
-            item.lng
-
-        );
-
-        return distance <= NEARBY_RADIUS;
-
-    });
-
-    const stats = calculateEmotionStats(nearbyData);
-
-    const total = Object.values(stats).reduce(
-        (sum, value) => sum + value,
-        0
-    );
-
-    document.getElementById("nearbyTotal").textContent =
-        total.toLocaleString("vi-VN");
-
-    document.getElementById("nearbyRadiusText").textContent =
-        "Trong bán kính 1.500 m";
-
-    const message = document.getElementById("nearbyMessage");
-
-    const list = document.getElementById("nearbyEmotionList");
-
-    list.innerHTML = "";
-
-    if (total === 0) {
-
-        message.textContent =
-            "Chưa có lượt ghi nhận cảm xúc trong phạm vi này.";
-
-    } else {
-
-        const highestEmotion = Object.keys(stats).reduce((a, b) => {
-
-            return stats[a] >= stats[b] ? a : b;
-
-        });
-
-        const config = emotionConfig[highestEmotion];
-
-        message.textContent =
-            `${config.icon} Cảm xúc được ghi nhận nhiều nhất quanh bạn là ${config.label.toLowerCase()}.`;
-
-    }
-
-    Object.keys(emotionConfig).forEach(emotion => {
-
-        // Khi đang lọc một cảm xúc,
-        // chỉ hiển thị cảm xúc được chọn.
-
-        if (
-            currentEmotionFilter !== "all" &&
-            currentEmotionFilter !== emotion
-        ) {
-            return;
-        }
-
-        const config = emotionConfig[emotion];
-
-        const item = document.createElement("div");
-
-        item.className = "nearby-emotion-item";
-
-        item.innerHTML = `
-
-            <span class="nearby-emotion-icon">
-                ${config.icon}
-            </span>
-
-            <span class="nearby-emotion-name">
-                ${config.label}
-            </span>
-
-            <strong class="nearby-emotion-count">
-                ${stats[emotion].toLocaleString("vi-VN")}
-            </strong>
-
-        `;
-
-        list.appendChild(item);
-
-    });
-
-    panel.style.display = "block";
-
-}
-
-
-// ==========================================
-// 27. ĐỊNH VỊ NGƯỜI DÙNG
-// ==========================================
-
-let userMarker = null;
-
-let accuracyCircle = null;
-
-let nearbyRadiusCircle = null;
-
-
-function locateUser() {
-
-    if (!navigator.geolocation) {
-
-        alert("Trình duyệt không hỗ trợ định vị!");
-
-        return;
-
-    }
-
-    navigator.geolocation.getCurrentPosition(
-
-        function(position) {
-
-            const lat = position.coords.latitude;
-
-            const lng = position.coords.longitude;
-
-            const accuracy = position.coords.accuracy;
-
-            // Xóa vị trí và vòng tròn cũ.
-
-            locationLayer.clearLayers();
-
-
-            // Icon vị trí người dùng.
-
-            const userIcon = L.divIcon({
-
-                className: "",
-
-                html: `
-                    <div class="my-location"></div>
-                `,
-
-                iconSize: [18, 18],
-
-                iconAnchor: [9, 9]
-
-            });
-
-
-            // Marker vị trí người dùng.
-
-            userMarker = L.marker(
-
-                [lat, lng],
-
-                {
-                    icon: userIcon
-                }
-
-            ).addTo(locationLayer);
-
-
-            userMarker.bindPopup(
-                "📍 Vị trí hiện tại của bạn"
-            );
-
-
-            // Vòng tròn độ chính xác GPS.
-
-            accuracyCircle = L.circle(
-
-                [lat, lng],
-
-                {
-
-                    radius: accuracy,
-
-                    color: "#2563eb",
-
-                    fillColor: "#3b82f6",
-
-                    fillOpacity: 0.12,
-
-                    weight: 1
-
-                }
-
-            ).addTo(locationLayer);
-
-
-            // Vòng tròn thống kê bán kính 1.500 m.
-
-            nearbyRadiusCircle = L.circle(
-
-                [lat, lng],
-
-                {
-
-                    radius: NEARBY_RADIUS,
-
-                    color: "#2563eb",
-
-                    fillColor: "#3b82f6",
-
-                    fillOpacity: 0.04,
-
-                    weight: 2,
-
-                    dashArray: "8, 8"
-
-                }
-
-            ).addTo(locationLayer);
-
-
-            // Di chuyển bản đồ tới vị trí người dùng.
-
-            map.flyTo(
-
-                [lat, lng],
-
-                15,
-
-                {
-                    duration: 1.5
-                }
-
-            );
-
-
-            // Cập nhật thống kê cảm xúc xung quanh.
-
-            showNearbyEmotions(lat, lng);
-
-            userMarker.openPopup();
-
-        },
-
-        function(error) {
-
-            let message = "Không thể xác định vị trí.";
-
-            if (error.code === 1) {
-
-                message = "Bạn chưa cấp quyền truy cập vị trí.";
-
-            }
-
-            if (error.code === 2) {
-
-                message = "Không xác định được vị trí hiện tại.";
-
-            }
-
-            if (error.code === 3) {
-
-                message = "Yêu cầu định vị đã hết thời gian.";
-
-            }
-
-            alert(message);
-
-        },
-
-        {
-
-            enableHighAccuracy: true,
-
-            timeout: 10000,
-
-            maximumAge: 0
-
-        }
-
-    );
-
-}
-
-
 // ==========================================
 // 28. XỬ LÝ SỰ KIỆN ZOOM
 // ==========================================
@@ -1429,12 +1115,6 @@ document
 document
     .getElementById("showBoth")
     .addEventListener("click", showBoth);
-
-
-document
-    .getElementById("locateMe")
-    .addEventListener("click", locateUser);
-
 
 // ==========================================
 // 31. KHỞI CHẠY DỰ ÁN
